@@ -54,6 +54,10 @@ uint8_t readOneWire( struct Message * m )
       // Line 4
       sprintf( m->line4, "W34:%lu%c", charToUint32( unikatnyROMKod + 1, 4 ), '\0' );
 
+      #if DEBUG >= 1
+        DPRINTLN( m->line2 );
+      #endif
+
       return 0;
     }
     // Zacatie noveho vyhladavania kluca. Dalsie pouzitie search vrati udaje o dalsom kluci.

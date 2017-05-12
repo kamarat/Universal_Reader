@@ -47,6 +47,10 @@ uint8_t readWiegand( struct Message * m )
     // Line 4
     m->line4[ 0 ] = '\0';
 
+    #if DEBUG >= 1
+      DPRINTLN( m->line2 );
+    #endif
+
     return 0;
   }
   return 1;

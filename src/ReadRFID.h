@@ -58,6 +58,10 @@ uint8_t readRFID( struct Message * m )
       rfid.PICC_HaltA();        // halt PICC
       rfid.PCD_StopCrypto1();   // stop encryption on PCD
 
+      #if DEBUG >= 1
+        DPRINTLN( m->line2 );
+      #endif
+
       return 0;
     }
   }
