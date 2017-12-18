@@ -28,5 +28,34 @@ uint32_t charToUint32( uint8_t * arr, uint8_t pocet )
   }
   return n;
 }
+uint64_t binToUint64( uint8_t * arr, uint8_t pocet )
+{
+  uint64_t n = 0;
+  for ( uint8_t i = 0; i < pocet; i++ ) {
+    n |= ( uint64_t )arr[ i ] << ((( pocet - 1 ) << 3 ) - ( i << 3 ));
+  }
+  return n;
+}
+
+void uint64ToChar( char * line, uint64_t n )
+{
+  uint64_t temp = n;
+  uint8_t strLen = 1;
+
+  while ( temp ) {
+    temp = temp / 10;
+    strLen++;
+  }
+
+  //if ( size >= strLen ) {
+    *( line + --strLen ) = '\0';
+    temp = n;
+
+    do {
+      *( line + strLen - 1) = ( temp %  10 ) + '0';
+      temp = temp / 10;
+    } while ( strLen--);
+  //}
+}
 
 #endif  // #ifndef CONFIG_H

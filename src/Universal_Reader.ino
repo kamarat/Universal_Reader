@@ -46,7 +46,7 @@
 /*== Deklaracia konstant ==
  */
 const uint16_t INIT_TIME = 5000;    // in ms
-const uint16_t TASKER_TIME = 1000;  // in ms
+const uint16_t TASKER_TIME = 100;  // in ms
 
 /*== Deklaracia premennych ==
  */
@@ -99,7 +99,7 @@ void loop()
       DPRINTLN2( "i = ", i );
     #endif
 
-    if ( !taskInterval( call[ i ], 100, &msg )) {
+    if ( !taskInterval( call[ i ], TASKER_TIME, &msg )) {
       lcd.clear();
       lcdSetcPrint( 0, 0, msg.line1 );
       lcdSetcPrint( 0, 1, msg.line2 );

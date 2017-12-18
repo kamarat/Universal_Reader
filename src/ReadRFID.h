@@ -50,10 +50,10 @@ uint8_t readRFID( struct Message * m )
       *ptr = '\0';
 
       // Line 3
-      sprintf( m->line3, "DEC:%lu%c", charToUint32( rfid.uid.uidByte, rfid.uid.size ), '\0' );
+      sprintf( m->line3, "DEC:%c", '\0' );
 
       // Line 4
-      m->line4[ 0 ] = '\0';
+      uint64ToChar( m->line4, binToUint64( rfid.uid.uidByte, rfid.uid.size ));
 
       rfid.PICC_HaltA();        // halt PICC
       rfid.PCD_StopCrypto1();   // stop encryption on PCD
