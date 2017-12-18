@@ -14,6 +14,7 @@
 #include "ReadOneWire.h"
 #include "ReadWiegand.h"
 #include "ReadRFID.h"
+#include "ReadRFID2.h"
 
 
 #endif  // #ifndef HEADERS_H

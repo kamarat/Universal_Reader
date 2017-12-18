@@ -17,11 +17,20 @@
  *
  * ARDUINO --- PERIFERIE
  *
- * D 22 --- kontakt TM citacky 1 iButton
- * Rezistor 2k2 - medzi D22 a 5V
+ * A  4 --- SDA na prevodniku k LCD
+ * A  5 --- SCL na prevodniku k LCD
  *
- * D 24 --- Wiegand DATA0
- * D 25 --- Wiegand DATA1
+ * D  9 --- RST na RFID-RC522 (13,56 MHz)
+ * D 10 --- SDA na RFID-RC522 (13,56 MHz)
+ * D 11 --- MOSI na RFID-RC522 (13,56 MHz)
+ * D 12 --- MISO na RFID-RC522 (13,56 MHz)
+ * D 13 --- SCK na RFID-RC522 (13,56 MHz)
+ *
+ * D  4 --- kontakt + citacky iButton
+ *          rezistor 2k2 - medzi D4 a 5V
+ *
+ * D  5 --- Wiegand DATA0
+ * D  6 --- Wiegand DATA1
  */
 
 /*== KNIZNICE A SUBORY ==
@@ -46,7 +55,8 @@ LiquidCrystal_I2C lcd( 0x27, 20, 4 );  // nastavenie adresy LCD a rozlisenia dis
 TaskCallback call[] = {
   readOneWire,
   readWiegand,
-  readRFID
+  readRFID,
+  readRFID2
 };
 
 /*== Deklaracia funkcii ==
