@@ -58,10 +58,16 @@ uint8_t readRFID2( struct Message * m )
         *ptr = '\0';
 
         // Line 3
-        sprintf( m->line3, "DEC:%lu%c", charToUint32( code + 3, 3 ), '\0' );
+        //sprintf( m->line3, "DEC:%lu%c", charToUint32( code + 3, 3 ), '\0' );
 
         // Line 4
-        m->line4[ 0 ] = '\0';
+        //m->line4[ 0 ] = '\0';
+
+        // Line 3
+        sprintf( m->line3, "DEC:%c", '\0' );
+
+        // Line 4
+        uint64ToChar( m->line4, binToUint64( code + 1, 4 ));
 
         #if DEBUG >= 1
           DPRINTLN( m->line2 );
