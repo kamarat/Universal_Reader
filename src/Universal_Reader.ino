@@ -20,17 +20,18 @@
  * A  4 --- SDA na prevodniku k LCD
  * A  5 --- SCL na prevodniku k LCD
  *
- * D  9 --- RST na RFID-RC522 (13,56 MHz)
- * D 10 --- SDA na RFID-RC522 (13,56 MHz)
- * D 11 --- MOSI na RFID-RC522 (13,56 MHz)
- * D 12 --- MISO na RFID-RC522 (13,56 MHz)
- * D 13 --- SCK na RFID-RC522 (13,56 MHz)
- *
+ * D  0 --- Tx na citacke 125 kHz
  * D  4 --- kontakt + citacky iButton
  *          rezistor 2k2 - medzi D4 a 5V
  *
  * D  5 --- Wiegand DATA0
  * D  6 --- Wiegand DATA1
+ *
+ * D  9 --- RST na RFID-RC522 (13,56 MHz)
+ * D 10 --- SDA na RFID-RC522 (13,56 MHz)
+ * D 11 --- MOSI na RFID-RC522 (13,56 MHz)
+ * D 12 --- MISO na RFID-RC522 (13,56 MHz)
+ * D 13 --- SCK na RFID-RC522 (13,56 MHz)
  */
 
 /*== KNIZNICE A SUBORY ==
@@ -68,7 +69,7 @@ TaskCallback call[] = {
 void setup()
 {
   #if DEBUG >= 1
-    Serial.begin( 57600 );  // Inicializacia serioveho vystupu
+    Serial.begin( 9600 );  // Inicializacia serioveho vystupu
     DPRINTSLN( "Start inicializacie." );
   #endif
 

@@ -10,13 +10,13 @@
  */
 /*== Deklaracia konstant ==
  */
-const uint8_t IBUTTON_CITACKA = 4;
+const uint8_t IBUTTON_CITACKA = 4;  // digitalny pin s pripojenou citackou
 
 /*== Deklaracia premennych ==
  */
 OneWire citacka ( IBUTTON_CITACKA );
 
-uint8_t unikatnyROMKod[ 8 ] = {0};  // adresa + identifikator zariadenia - 8 bajtove pole
+uint8_t unikatnyROMKod[ 8 ] = {0};  // adresa + identifikator zariadenia - 8-bajtove pole
 
 enum vysledkyNacitania {
   OK = 0,
@@ -24,8 +24,18 @@ enum vysledkyNacitania {
   NO_IBUTTON
 } vysledokNacitania;
 
-uint32_t charToUint32( uint8_t * arr, uint8_t pocet );
+/*== Deklaracia funkcii ==
+ */
+//uint32_t charToUint32( uint8_t * arr, uint8_t pocet );
+const char * getFamilyCode( byte code );
 
+/*******************************************************************************
+ *    Function: readOneWire
+ * Description: nacitanie informacii z DALLAS kluca
+ *   Parameter: riadky pre zobrazenie na LCD
+ *      Return: uint8_t 0 - kluc nacitany
+ *                      1 - kluc nenacitany
+ ******************************************************************************/
 uint8_t readOneWire( struct Message * m )
 {
   #if DEBUG >= 2
@@ -39,12 +49,14 @@ uint8_t readOneWire( struct Message * m )
     // Vypocet a kontrola CRC nad polom unikatnyROMKod.
     if ( OneWire::crc8( unikatnyROMKod, 7 ) == unikatnyROMKod[ 7 ]) {
       // Line 1
-      sprintf( m->line1, "iButton: %s%c", chips[ unikatnyROMKod[ 0 ] - 1 ].part, '\0' );
+      //sprintf( m->line1, "CHIP: %s%c", chips[ unikatnyROMKod[ 0 ] - 1 ].part, '\0' );
+      sprintf( m->line1, "CHIP:%s%c", getFamilyCode( unikatnyROMKod[ 0 ]), '\0' );
 
       // Line 2
       char * ptr = m->line2;
       ptr += sprintf( ptr, "HEX:" );
-      for ( uint8_t i = 0; i < 8; i++ )
+      // Nacitanie kodu kluca bez CRC
+      for ( uint8_t i = 0; i < 7; i++ )
         ptr += sprintf( ptr, "%02X", unikatnyROMKod[ i ] );
       *ptr = '\0';
 
@@ -64,6 +76,65 @@ uint8_t readOneWire( struct Message * m )
     citacka.reset_search();
   }
   return 1;
-} // uint8_t readOneWire( struct Message * m )
+
+}/*******************************************************************************
+ *    Function: getFamilyCode
+ * Description: urcenie cipu podla kodu
+ *   Parameter: [IN] byte code - kod / typ cipu
+ *      Return: char * - retazec s popisom cipu
+ ******************************************************************************/
+const char * getFamilyCode( byte code )
+{
+	switch ( code ) {
+    case 0x01:	return "DS1990A/DS1990R";
+    case 0x02:	return "DS1991";
+    case 0x04:	return "DS1994";
+    case 0x05:	return "DS2405";
+    case 0x06:	return "DS1993";
+    case 0x08:  return "DS1992";
+    case 0x09:	return "DS1982/DS2502";
+    case 0x0A:	return "DS1995";
+    case 0x0B:	return "DS1985/DS2505";
+    case 0x0C:	return "DS1996";
+    default:	return "Unknown type";
+  }
+}
+
+/*
+Family Code   Part
+() - iButton Package  Description
+(Memory size in bits unless specified)
+01 (hex)  (DS1990A), (DS1990R), DS2401, DS2411  1-Wire net address (registration number) only
+02  (DS1991)¹   Multikey iButton, 1152-bit secure memory
+04  (DS1994), DS2404  4Kb NV RAM memory and clock, timer, alarms
+05  DS2405¹   Single addressable switch
+06  (DS1993)  4Kb NV RAM memory
+08  (DS1992)  1Kb NV RAM memory
+09  (DS1982), DS2502  1Kb EPROM memory
+0A  (DS1995)  16Kb NV RAM memory
+0B  (DS1985), DS2505  16Kb EPROM memory
+0C  (DS1996)  64Kb NV RAM memory
+0F  (DS1986), DS2506  64Kb EPROM memory
+10  (DS1920)  Temperature with alarm trips
+12  DS2406, DS2407¹   1Kb EPROM memory, 2-channel addressable switch
+14  (DS1971), DS2430A¹  256-bit EEPROM memory and 64-bit OTP register
+1A  (DS1963L)¹  4Kb NV RAM memory with write cycle counters
+1C  DS28E04-100   4096-bit EEPROM memory, 2-channel addressable switch
+1D  DS2423¹   4Kb NV RAM memory with external counters
+1F  DS2409¹   2-channel addressable coupler for sub-netting
+20  DS2450  4-channel A/D converter (ADC)
+21  (DS1921G), (DS1921H), (DS1921Z)   Thermochron® temperature logger
+23  (DS1973), DS2433  4Kb EEPROM memory
+24  (DS1904), DS2415  Real-time clock (RTC)
+27  DS2417  RTC with interrupt
+29  DS2408  8-channel addressable switch
+2C  DS2890¹   1-channel digital potentiometer
+2D  (DS1972), DS2431  1024-bit, 1-Wire EEPROM
+37  (DS1977)  Password-protected 32KB (bytes) EEPROM
+3A  (DS2413)  2-channel addressable switch
+41  (DS1922L), (DS1922T), (DS1923), DS2422  High-capacity Thermochron (temperature) and Hygrochron™ (humidity) loggers
+42  DS28EA00  Programmable resolution digital thermometer with sequenced detection and PIO
+43  DS28EC20  20Kb 1-Wire EEPROM
+*/
 
 #endif  // #ifndef READ_ONE_WIRE_H

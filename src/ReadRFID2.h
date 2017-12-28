@@ -7,7 +7,7 @@
  *                                              head and data end
  */
 
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
 #include "global.h"
 
 /*== GLOBALNE PREMENNE ==
@@ -15,30 +15,35 @@
  */
 /*== Deklaracia konstant ==
  */
- const uint8_t RFID_DATA_HEAD = 0x02;
- const uint8_t RFID_DATA_END = 0x03;
+ const uint8_t RFID_DATA_HEAD = 0x02; // startovaci bajt spravy - hlavicka
+ const uint8_t RFID_DATA_END = 0x03;  // ukoncovaci bajt spravy
 
 /*== Deklaracia premennych ==
  */
-//SoftwareSerial RFID( 2, 3 ); // RX and TX
+uint8_t byteRead;           // pocitadlo precitanych bajtov
+uint8_t lengthRead;         // pocet bajtov spravy z citacky
+uint8_t code[ 10 ] = {0};   // pole s bajtmi kodu, 0 - typ cipu, 1-5 - kód
 
-uint8_t byteRead;       // pocitadlo precitanych bajtov
-uint8_t lengthRead;     // pocet bajtov spravy z citacky
-uint8_t code[ 10 ] = {0};  // pole s bajtmi kodu, 0 - typ chipu, 1-5 - kód
-
+/*== Deklaracia funkcii ==
+ */
 const char * getTypeName2( byte cardType );
 
+/*******************************************************************************
+ *    Function: readRFID2
+ * Description: nacitanie informacii z karty RFID 125 kHz
+ *   Parameter: [OUT] struct Message * m - riadky pre zobrazenie na LCD
+ *      Return: uint8_t 0 - karta nacitana
+ *                      1 - karta nenacitana
+ ******************************************************************************/
 uint8_t readRFID2( struct Message * m )
 {
-  Serial.begin( 9600 );    // start serial to RFID reader
-
   if ( Serial.available() > 0 ) {
     delay( 1 );
     if ( Serial.read() == RFID_DATA_HEAD ) {
       if ( Serial.available() > 0 ) {
-        lengthRead = Serial.read();
+        lengthRead = Serial.read(); // nacitanie dlzky spravy
         // vytvorit dynamicke pole code = malloc
-        byteRead = 0;
+        byteRead = 0; // nulovanie pocitadla bajtov spravy
 
         while ( byteRead < ( lengthRead - 2 )) {
           if ( Serial.available() > 0 ) {
@@ -53,21 +58,16 @@ uint8_t readRFID2( struct Message * m )
         // Line 2
         char * ptr = m->line2;
         ptr += sprintf( ptr, "HEX:" );
-        for ( uint8_t i = 1; i < 5 ; i++ )
+        for ( uint8_t i = 1; i <= 5 ; i++ )
           ptr += sprintf( ptr, "%02X", code[ i ] );
         *ptr = '\0';
 
-        // Line 3
-        //sprintf( m->line3, "DEC:%lu%c", charToUint32( code + 3, 3 ), '\0' );
+        //Line 3
+        uint64ToChar( m->line4, binToUint64( code + 1, 5 ));
+        sprintf( m->line3, "DEC:%s", m->line4 );
 
         // Line 4
-        //m->line4[ 0 ] = '\0';
-
-        // Line 3
-        sprintf( m->line3, "DEC:%c", '\0' );
-
-        // Line 4
-        uint64ToChar( m->line4, binToUint64( code + 1, 4 ));
+        sprintf( m->line4, "%c", '\0' );
 
         #if DEBUG >= 1
           DPRINTLN( m->line2 );
@@ -80,7 +80,13 @@ uint8_t readRFID2( struct Message * m )
   return 1;
 }
 
-const char * getTypeName2( byte cardType )  // One of the PICC_Type enums.
+/*******************************************************************************
+ *    Function: getTypeName2
+ * Description: urcenie cipu podla kodu
+ *   Parameter: [IN] byte cardType - kod / typ karty
+ *      Return: char * - retazec s popisom cipu / karty
+ ******************************************************************************/
+const char * getTypeName2( byte cardType )
 {
   switch ( cardType ) {
     case 0x02:  return "EM4100";
