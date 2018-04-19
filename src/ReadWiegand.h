@@ -18,15 +18,25 @@ const uint8_t DATA1 = 6;
 WIEGAND wg( DATA0, DATA1, 0 );
 static uint8_t startWG = 0;
 
+/*== FUNKCIE ==
+ *=============
+ */
+/*== Deklaracia funkcii ==
+ */
+
+/*== Definicia funkcii ==
+ */
+/*******************************************************************************
+ *    Function: getTypeName
+ * Description: urcenie cipu podla kodu
+ *   Parameter: [IN] byte sak - kod / typ karty
+ *      Return: char * - retazec s popisom cipu / karty
+ ******************************************************************************/
 uint8_t readWiegand( struct Message * m )
 {
   if ( !startWG ) {
     wg.begin();
     startWG = 1;
-
-    #if DEBUG >= 2
-      DPRINTLN_POINT( "" );
-    #endif
   }
 
   if( !wg.available() )

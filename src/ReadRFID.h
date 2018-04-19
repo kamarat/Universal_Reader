@@ -19,10 +19,17 @@ MFRC522 rfid( SS_PIN, RST_PIN );
 //MFRC522::MIFARE_Key key;
 static uint8_t startRFID = 0;
 
+/*== FUNKCIE ==
+ *=============
+ */
+/*== Deklaracia funkcii ==
+ */
 const char * getTypeName( byte sak );
 //void printHex(byte *buffer, byte bufferSize);
 //void printDec(byte *buffer, byte bufferSize);
 
+/*== Definicia funkcii ==
+ */
 /*******************************************************************************
  *    Function: readRFID
  * Description: nacitanie informacii z karty RFID 13.56 MHz
@@ -85,17 +92,17 @@ uint8_t readRFID( struct Message * m )
 const char * getTypeName( byte sak )
 {
 	switch ( sak ) {
-    case 0x04:	return "UID not complete"; // UID not complete
-    case 0x09:	return "MIFARE Mini 320";
-    case 0x08:	return "MIFARE 1KB";
-    case 0x18:	return "MIFARE 4KB";
-    case 0x00:	return "MIFARE Ultral";
-    case 0x10:  return "MIFARE Plus 2K";
-    case 0x11:	return "MIFARE Plus 4K";
-    case 0x01:	return "MIFARE TNP3XXX";
-    case 0x20:	return "ISO/IEC 14443-4";
-    case 0x40:	return "ISO/IEC 18092 NFC";
-    default:	return "Unknown type";
+    case 0x04: return "UID not complete"; // UID not complete
+    case 0x09: return "MIFARE Mini 320";
+    case 0x08: return "MIFARE 1KB";
+    case 0x18: return "MIFARE 4KB";
+    case 0x00: return "MIFARE Ultral";
+    case 0x10: return "MIFARE Plus 2K";
+    case 0x11: return "MIFARE Plus 4K";
+    case 0x01: return "MIFARE TNP3XXX";
+    case 0x20: return "ISO/IEC 14443-4";
+    case 0x40: return "ISO/IEC 18092 NFC";
+    default: return "Unknown type";
   }
 }
 

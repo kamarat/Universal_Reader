@@ -37,7 +37,7 @@
 /*== KNIZNICE A SUBORY ==
  *=======================
  */
-#define DEBUG 1  // Definicia odladovania a vypisov
+#define DEBUG 2  // Definicia odladovania a vypisov
 
 #include "headers.h"
 
@@ -97,7 +97,7 @@ void loop()
 {
   for ( uint8_t i = 0; i < sizeof( call ) / sizeof( call[ 0 ] ); i++ ) {
     #if DEBUG >= 2
-      DPRINTLN2( "i = ", i );
+      DPRINT2LN( "i = ", i );
     #endif
 
     if ( !taskInterval( call[ i ], TASKER_TIME, &msg )) {

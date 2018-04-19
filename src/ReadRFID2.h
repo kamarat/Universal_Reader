@@ -24,10 +24,16 @@ uint8_t byteRead;           // pocitadlo precitanych bajtov
 uint8_t lengthRead;         // pocet bajtov spravy z citacky
 uint8_t code[ 10 ] = {0};   // pole s bajtmi kodu, 0 - typ cipu, 1-5 - kód
 
+
+/*== FUNKCIE ==
+ *=============
+ */
 /*== Deklaracia funkcii ==
  */
 const char * getTypeName2( byte cardType );
 
+/*== Definicia funkcii ==
+ */
 /*******************************************************************************
  *    Function: readRFID2
  * Description: nacitanie informacii z karty RFID 125 kHz

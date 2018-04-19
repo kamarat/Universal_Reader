@@ -24,11 +24,16 @@ enum vysledkyNacitania {
   NO_IBUTTON
 } vysledokNacitania;
 
+
+/*== FUNKCIE ==
+ *=============
+ */
 /*== Deklaracia funkcii ==
  */
-//uint32_t charToUint32( uint8_t * arr, uint8_t pocet );
 const char * getFamilyCode( byte code );
 
+/*== Definicia funkcii ==
+ */
 /*******************************************************************************
  *    Function: readOneWire
  * Description: nacitanie informacii z DALLAS kluca
@@ -86,17 +91,40 @@ uint8_t readOneWire( struct Message * m )
 const char * getFamilyCode( byte code )
 {
 	switch ( code ) {
-    case 0x01:	return "DS1990A/DS1990R";
-    case 0x02:	return "DS1991";
-    case 0x04:	return "DS1994";
-    case 0x05:	return "DS2405";
-    case 0x06:	return "DS1993";
-    case 0x08:  return "DS1992";
-    case 0x09:	return "DS1982/DS2502";
-    case 0x0A:	return "DS1995";
-    case 0x0B:	return "DS1985/DS2505";
-    case 0x0C:	return "DS1996";
-    default:	return "Unknown type";
+    case 0x01: return "DS1990A/DS1990R";
+    case 0x02: return "DS1991";
+    case 0x04: return "DS1994";
+    case 0x05: return "DS2405";
+    case 0x06: return "DS1993";
+    case 0x08: return "DS1992";
+    case 0x09: return "DS1982/DS2502";
+    case 0x0A: return "DS1995";
+    case 0x0B: return "DS1985/DS2505";
+    case 0x0C: return "DS1996";
+    case 0x0F: return "DS1986/DS2506";
+    case 0x10: return "DS1920";
+    /*
+    case 0x12: return "DS2406/DS2407";
+    case 0x14: return "DS1971/DS2430A";
+    case 0x1A: return "DS1963L";
+    case 0x1C: return "DS28E04-100";
+    case 0x1D: return "DS2423";
+    case 0x1F: return "DS2409";
+    case 0x20: return "DS2450";
+    case 0x21: return "DS1921G/H/Z";
+    case 0x23: return "DS1973/DS2433";
+    case 0x24: return "DS1904/DS2415";
+    case 0x27: return "DS2417";
+    case 0x29: return "DS2408";
+    case 0x2C: return "DS2890";
+    case 0x2D: return "DS1972/DS2431";
+    case 0x37: return "DS1977";
+    case 0x3A: return "DS2413";
+    case 0x41: return "DS1922/DS1923/DS2422";
+    case 0x42: return "DS28EA00";
+    case 0x43: return "DS28EC20";
+    */
+    default: return "Unknown type";
   }
 }
 
